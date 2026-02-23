@@ -114,15 +114,19 @@ class CreatePageTool(Tool):
                     children=children
                 )
                 page_id = data.get("id", "")
-                page_url = client.format_page_url(page_id)
-                
+                page_url = data.get("url") or client.format_page_url(page_id)
+
                 # Return success information
                 summary = f"Successfully created page: {title}"
                 yield self.create_text_message(summary)
                 yield self.create_json_message({
                     "id": page_id,
                     "title": title,
-                    "url": page_url
+                    "url": page_url,
+                    "created_time": data.get("created_time", ""),
+                    "last_edited_time": data.get("last_edited_time", ""),
+                    "archived": data.get("archived", False),
+                    "parent": data.get("parent", {}),
                 })
             except requests.HTTPError as e:
                 if e.response.status_code == 404:

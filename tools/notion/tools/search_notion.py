@@ -75,15 +75,19 @@ class SearchNotionTool(Tool):
                     if parent.get("type") == "database_id":
                         object_type = "data_source"  # Keep as data_source for clarity
                 
-                # Create URL
-                url = client.format_page_url(result_id)
-                
+                # Use API-provided URL, fall back to formatted URL
+                url = result.get("url") or client.format_page_url(result_id)
+
                 # Add to formatted results
                 formatted_results.append({
                     "id": result_id,
                     "title": title,
                     "type": object_type,
-                    "url": url
+                    "url": url,
+                    "created_time": result.get("created_time", ""),
+                    "last_edited_time": result.get("last_edited_time", ""),
+                    "archived": result.get("archived", False),
+                    "parent": result.get("parent", {}),
                 })
             
             # Return results

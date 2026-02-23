@@ -45,8 +45,9 @@ class RetrievePageTool(Tool):
                         # If we can't get the content, just return the page data
                         formatted_page["content_error"] = str(e)
                 
-                # Format URL
-                formatted_page["url"] = client.format_page_url(page_id)
+                # Use API-provided URL, fall back to formatted URL
+                formatted_page["url"] = page_data.get("url") or client.format_page_url(page_id)
+                formatted_page["parent"] = page_data.get("parent", {})
                 
                 # Return results
                 title = formatted_page.get("title", "Untitled")

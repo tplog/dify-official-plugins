@@ -86,7 +86,7 @@ class QueryDatabaseTool(Tool):
             for result in results:
                 # Get page ID and URL
                 page_id = result.get("id")
-                page_url = client.format_page_url(page_id)
+                page_url = result.get("url") or client.format_page_url(page_id)
                 
                 # Extract properties
                 properties = result.get("properties", {})
@@ -139,7 +139,10 @@ class QueryDatabaseTool(Tool):
                 formatted_results.append({
                     "id": page_id,
                     "url": page_url,
-                    "properties": formatted_properties
+                    "created_time": result.get("created_time", ""),
+                    "last_edited_time": result.get("last_edited_time", ""),
+                    "archived": result.get("archived", False),
+                    "properties": formatted_properties,
                 })
             
             # Return results

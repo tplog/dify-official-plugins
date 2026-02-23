@@ -98,9 +98,10 @@ class UpdatePageTool(Tool):
                         yield self.create_text_message(f"Error adding content to page: {e}")
                         return
                 
-                # Return success response
-                page_url = client.format_page_url(page_id)
-                
+                # Retrieve the updated page to get latest state
+                updated_data = client.retrieve_page(page_id)
+                page_url = updated_data.get("url") or client.format_page_url(page_id)
+
                 # Create response message
                 actions = []
                 if title:
@@ -109,16 +110,20 @@ class UpdatePageTool(Tool):
                     actions.append("added new content")
                 if archive:
                     actions.append("archived the page")
-                
+
                 action_text = ", ".join(actions)
                 summary = f"Successfully {action_text}"
-                
+
                 yield self.create_text_message(summary)
                 yield self.create_json_message({
                     "id": page_id,
                     "url": page_url,
                     "updated": True,
-                    "actions": actions
+                    "actions": actions,
+                    "created_time": updated_data.get("created_time", ""),
+                    "last_edited_time": updated_data.get("last_edited_time", ""),
+                    "archived": updated_data.get("archived", False),
+                    "parent": updated_data.get("parent", {}),
                 })
                 
             except requests.HTTPError as e:

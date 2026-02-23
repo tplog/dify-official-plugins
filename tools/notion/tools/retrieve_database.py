@@ -44,8 +44,9 @@ class RetrieveDatabaseTool(Tool):
                 # Format the database data
                 formatted_database = self._format_database_data(database_data, data_source_data, data_sources)
                 
-                # Add URL
-                formatted_database["url"] = client.format_page_url(database_id)
+                # Use API-provided URL, fall back to formatted URL
+                formatted_database["url"] = database_data.get("url") or client.format_page_url(database_id)
+                formatted_database["parent"] = database_data.get("parent", {})
                 
                 # Return results
                 database_title = formatted_database.get("title", "Untitled Database")

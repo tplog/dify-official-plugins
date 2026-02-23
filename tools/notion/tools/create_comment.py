@@ -47,8 +47,11 @@ class CreateCommentTool(Tool):
                 result = {
                     "id": comment_data.get("id", ""),
                     "created_time": comment_data.get("created_time", ""),
+                    "last_edited_time": comment_data.get("last_edited_time", ""),
                     "content": content,
-                    "page_id": page_id
+                    "page_id": page_id,
+                    "parent": comment_data.get("parent", {}),
+                    "discussion_id": comment_data.get("discussion_id", ""),
                 }
                 
                 # Extract user information if available

@@ -58,15 +58,18 @@ class UpdateDatabaseTool(Tool):
                 
                 # Extract database ID and URL
                 updated_id = database_data.get("id", "")
-                database_url = client.format_page_url(updated_id)
-                
+                database_url = database_data.get("url") or client.format_page_url(updated_id)
+
                 # Format the response
                 result = {
                     "id": updated_id,
                     "url": database_url,
-                    "updated": True
+                    "updated": True,
+                    "created_time": database_data.get("created_time", ""),
+                    "last_edited_time": database_data.get("last_edited_time", ""),
+                    "parent": database_data.get("parent", {}),
                 }
-                
+
                 # Add details about what was updated
                 updates = []
                 if title:

@@ -62,14 +62,17 @@ class CreateDatabaseTool(Tool):
                 
                 # Extract database ID and URL
                 database_id = database_data.get("id", "")
-                database_url = client.format_page_url(database_id)
-                
+                database_url = database_data.get("url") or client.format_page_url(database_id)
+
                 # Format the response
                 result = {
                     "id": database_id,
                     "url": database_url,
                     "title": title,
-                    "created": True
+                    "created": True,
+                    "created_time": database_data.get("created_time", ""),
+                    "last_edited_time": database_data.get("last_edited_time", ""),
+                    "parent": database_data.get("parent", {}),
                 }
                 
                 yield self.create_text_message(f"Database '{title}' created successfully.")
