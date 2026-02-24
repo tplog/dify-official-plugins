@@ -114,7 +114,7 @@ class CreatePageTool(Tool):
                     children=children
                 )
                 page_id = data.get("id", "")
-                page_url = client.format_page_url(page_id)
+                page_url = data.get("url", "")
                 
                 # Return success information
                 summary = f"Successfully created page: {title}"
